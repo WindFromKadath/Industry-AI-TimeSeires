@@ -21,6 +21,10 @@ uv run scripts/new_algorithm.py <category> <algo_name>
 
 根目录执行 `uv add <包名>`(全仓库共享单一环境)。不要为单个算法创建独立环境。
 
+**禁止使用 `uv pip install`**:它写入环境但不写入 `pyproject.toml`,`uv sync` 会把环境严格对齐到声明依赖并将其**清除**。所有依赖必须落在 `pyproject.toml` 里。
+
+**CUDA 版 PyTorch 已固定**:通过 `[tool.uv.sources]` + `[[tool.uv.index]]` 指向官方 `cu130` 索引(适配 RTX 50 系),升级时改版本号即可,不要改用 `uv pip install` 覆盖。
+
 **依赖冲突兜底**(预期极少):若某算法确实需要与其他算法冲突的版本,仅在该算法目录内 `uv init` 独立环境,并在其 README 中醒目标注;仓库其余部分保持不变。
 
 ## 二、数据与对比约定

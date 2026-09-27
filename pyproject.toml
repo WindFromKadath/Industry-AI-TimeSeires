@@ -10,11 +10,25 @@ requires-python = ">=3.12"
 dependencies = [
     "numpy>=2.0",
     "scikit-learn>=1.9.1",
+    "torch>=2.14",
+    "torchvision>=0.29",
 ]
 
 # 纯学习仓库:不打包、不发布,根目录只作为统一的依赖与工具入口
 [tool.uv]
 package = false
+
+# CUDA 版 PyTorch 固定走官方 cu130 索引(适配 RTX 50 系 Blackwell);
+# explicit = true 保证仅 torch/torchvision 使用该索引,其余仍走 PyPI。
+# 切勿用 uv pip install 装 torch —— 不写入本文件,uv sync 会将其清除。
+[tool.uv.sources]
+torch = { index = "pytorch-cu130" }
+torchvision = { index = "pytorch-cu130" }
+
+[[tool.uv.index]]
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
+explicit = true
 
 [dependency-groups]
 dev = [
