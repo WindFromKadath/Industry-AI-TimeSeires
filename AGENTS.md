@@ -1,6 +1,6 @@
 # AGENTS.md — 维护 Agent 入口
 
-本文件是 AI Agent(及新维护者)接手本仓库的**唯一入口**:读完本文件即可开始工作;更细的规范见 [CONTRIBUTING.md](CONTRIBUTING.md),项目全貌见 [README.md](README.md)。
+本文件是 AI Agent(及新维护者)接手本仓库的**唯一入口**:读完本文件即可开始工作;更细的规范见 [CONTRIBUTING.md](CONTRIBUTING.md),项目全貌见 [README.md](README.md),维护任务的标准提示词模板见 [docs/prompts.md](docs/prompts.md)。
 
 ## 1. 项目定位
 

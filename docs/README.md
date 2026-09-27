@@ -12,7 +12,8 @@
 ## 目录说明
 
 - `papers/` — 论文精读笔记,文件名用 `<算法名>_<会议年份>.md`(小写 snake_case)
-- `benchmarks.md` — 同一数据集上多算法的对比结果表
+- `benchmarks.md` — 同一数据集上多算法的对比结果表(由 `scripts/collect_results.py` 自动生成,勿手改)
+- `prompts.md` — 维护提示词手册:各类维护任务的标准提示词模板,新开 AI 会话时复制使用
 
 ## 论文笔记模板
 
