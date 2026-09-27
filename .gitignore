@@ -48,3 +48,6 @@ Only-for-tests/
 # OS
 Thumbs.db
 .DS_Store
+
+# Local scratch / test files
+Only-for-test/
