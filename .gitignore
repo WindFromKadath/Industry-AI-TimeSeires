@@ -1,0 +1,47 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Editor personal config (may contain private local paths)
+.vscode/
+
+# Data files — register datasets in data/README.md, never commit raw data
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Experiment outputs
+outputs/
+runs/
+wandb/
+mlruns/
+
+# Model weights / large binaries
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.safetensors
+
+# Papers — copyright & size; keep links in docs/papers/*.md instead
+*.pdf
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS
+Thumbs.db
+.DS_Store

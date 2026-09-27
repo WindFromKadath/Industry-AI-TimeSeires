@@ -1,0 +1,31 @@
+[project]
+name = "industry-llm-timeseires"
+version = "0.1.0"
+description = "工业时序 AI 学习仓库:经典论文复现与算法实验"
+readme = "README.md"
+authors = [
+    { name = "WindFromKadath" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.0",
+    "scikit-learn>=1.9.1",
+]
+
+# 纯学习仓库:不打包、不发布,根目录只作为统一的依赖与工具入口
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.12.0",
+]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+# E4/E7/E9: 导入与明显错误;F: pyflakes;I: import 排序
+# 行宽交给 formatter 处理,故不选 E501
+select = ["E4", "E7", "E9", "F", "I"]
