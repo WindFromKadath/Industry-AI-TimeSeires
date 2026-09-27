@@ -21,12 +21,13 @@
 
 ```bash
 cd algorithms/<category>/{{ALGO_NAME}}
-uv run python train.py
+uv run python train.py --dataset <数据集登记名>
+uv run python train.py --dataset <数据集登记名> --seed 0   # 改参数复跑
 ```
 
 ## 结果
 
-<指标与现象;详细数值写入 `outputs/{{ALGO_NAME}}/metrics.json`>
+每次运行写入 `outputs/{{ALGO_NAME}}/<dataset>/metrics.json`;运行 `uv run python scripts/collect_results.py` 后对比表自动刷新到 `docs/benchmarks.md`。
 
 ## 参考文献
 

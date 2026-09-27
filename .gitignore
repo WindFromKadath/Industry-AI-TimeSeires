@@ -42,6 +42,9 @@ mlruns/
 # Notebook checkpoints
 .ipynb_checkpoints/
 
+# Tests Directory
+Only-for-tests/
+
 # OS
 Thumbs.db
 .DS_Store

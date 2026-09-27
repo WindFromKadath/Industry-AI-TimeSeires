@@ -7,7 +7,7 @@
 | 复现状态 | 已复现(基于 sklearn 成熟实现) |
 | 任务类别 | anomaly_detection |
 | 数据集 | synthetic-point-anomaly(内存合成,见 `data.py`) |
-| 结果摘要 | 合成点异常检测 AP / ROC-AUC 见 `outputs/isolation_forest/metrics.json` |
+| 结果摘要 | 合成点异常检测 AP ≈ 0.99 / ROC-AUC ≈ 1.0,见 `outputs/isolation_forest/` |
 
 ## 原理简介
 
@@ -15,18 +15,19 @@
 
 ## 数据
 
-内存生成的合成单变量时序(趋势 + 周期 + 高斯噪声),随机注入大幅尖峰作为点异常;以**居中滑动窗口**去趋势/季节化,取残差与窗口标准差构造特征(见 `data.py`)。
+默认数据集 `synthetic-point-anomaly` 为内存生成(趋势 + 周期 + 高斯噪声 + 尖峰点异常),无需文件;真实数据集按仓库标准格式(`data/processed/<name>/{train.csv,test.csv,meta.json}`)经 `load_dataset()` 统一加载,换数据集只需改 `--dataset` 参数。特征为居中滑动窗口的残差与标准差(去趋势/季节化,见 `data.py`)。
 
 ## 运行方式
 
 ```bash
 cd algorithms/anomaly_detection/isolation_forest
-uv run python train.py
+uv run python train.py                                  # 默认合成数据
+uv run python train.py --dataset <登记名> --seed 0       # 换数据集/种子
 ```
 
 ## 结果
 
-训练后指标写入 `outputs/isolation_forest/metrics.json`,终端同步打印。
+每次运行写入 `outputs/isolation_forest/<dataset>/metrics.json`;`uv run python scripts/collect_results.py` 将对比表自动刷新到 `docs/benchmarks.md`。
 
 ## 参考文献
 
@@ -35,4 +36,4 @@ uv run python train.py
 
 ## TODO
 
-- [ ] 接入 `data/` 中的真实工业数据集后,在 `docs/benchmarks.md` 登记对比结果
+- [ ] 接入真实工业数据集(如 MSL/SMAP/SMD),验证标准格式加载路径并登记 `docs/benchmarks.md`

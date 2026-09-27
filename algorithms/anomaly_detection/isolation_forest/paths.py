@@ -13,3 +13,5 @@ DATA_DIR = REPO_ROOT / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 OUTPUT_DIR = REPO_ROOT / "outputs" / "isolation_forest"
+# train.py writes one run record to OUTPUT_DIR / <dataset> / metrics.json;
+# scripts/collect_results.py aggregates all of them into docs/benchmarks.md

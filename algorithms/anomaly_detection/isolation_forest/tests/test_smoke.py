@@ -1,19 +1,23 @@
-"""Smoke test: the full pipeline runs on a small synthetic series."""
+"""Smoke tests: synthetic pipeline runs; missing real datasets fail loudly."""
 
-from config import Config
+import pytest
 from model import build_model
 
-from data import make_features, make_series
+from data import load_dataset, make_features
 
 
 def test_pipeline_smoke():
-    config = Config(n_samples=512, n_estimators=50)
-    values, labels = make_series(
-        config.n_samples, config.anomaly_ratio, config.seed
-    )
-    features = make_features(values, config.window)
-    model = build_model(config.n_estimators, config.contamination, config.seed)
-    model.fit(features)
-    scores = -model.decision_function(features)
-    assert len(scores) == config.n_samples - config.window + 1
-    assert labels.sum() > 0
+    dataset = load_dataset("synthetic-point-anomaly", seed=0)
+    window = 24
+    train_feats = make_features(dataset.train, window)
+    test_feats = make_features(dataset.test, window)
+    model = build_model(n_estimators=50, contamination=0.03, seed=0)
+    model.fit(train_feats)
+    scores = -model.decision_function(test_feats)
+    assert len(scores) == len(dataset.test) - window + 1
+    assert dataset.test_labels.sum() > 0
+
+
+def test_missing_dataset_raises():
+    with pytest.raises(FileNotFoundError, match="register it in"):
+        load_dataset("dataset-that-does-not-exist")

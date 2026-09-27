@@ -13,9 +13,9 @@ uv run scripts/new_algorithm.py <category> <algo_name>
 1. **算法 README**:填写元信息表——论文笔记相对链接、论文出处、复现状态(`未开始/进行中/已复现`)、数据集登记名、结果摘要。
 2. **论文笔记**:在 `docs/papers/` 新建 `<算法名>_<会议年份>.md`(模板见 `docs/README.md`),填写动机/方法/实验设置/复现要点。
 3. **登记总表**:在 `docs/README.md` 的映射总表加一行:论文 | 论文笔记 | 算法实现 | 数据集 | 状态。
-4. **实现代码**:`data.py`(加载,数据只从 `data/` 读)、`model.py`、`train.py`(指标写 `outputs/<algo>/metrics.json`)。
+4. **实现代码**:`data.py`(`load_dataset` 读标准格式)、`model.py`、`train.py`(argparse 入口,指标写 `outputs/<algo>/<dataset>/metrics.json`)。
 5. **代码↔论文标注**:关键类/函数的 docstring 注明对应论文的章节或公式编号,如 `Implements Eq. (3) of <paper>`。
-6. **验证**:算法目录内 `uv run pytest -q` 通过;根目录 `uv run ruff check .` 零告警。
+6. **验证**:算法目录内 `uv run pytest -q` 通过;根目录 `uv run ruff check .` 零告警;`uv run python scripts/collect_results.py` 刷新对比表。
 
 ### 新增依赖
 
@@ -30,8 +30,10 @@ uv run scripts/new_algorithm.py <category> <algo_name>
 ## 二、数据与对比约定
 
 - 数据统一放 `data/raw/<dataset>/`,预处理产物放 `data/processed/<dataset>/`;**数据文件不提交 Git**。
+- 预处理产物必须遵循**标准格式**(`train.csv` / `test.csv` / `meta.json`,字段见 `data/README.md`);预处理脚本放 `scripts/preprocess_<dataset>.py`,一个数据集一个脚本。
 - 每个数据集必须在 `data/README.md` 登记:来源、许可、格式字段、预处理与划分方式——这是多算法结果可比的前提。
-- 多算法对比结果人工汇总进 `docs/benchmarks.md`,指标取自各算法的 `outputs/<algo>/metrics.json`。
+- 算法经 `load_dataset(name)` 加载数据,`train.py` 必须支持 `--dataset`/`--seed` 等 CLI 参数;**换数据集只改参数,不改代码**。
+- 每次运行写 `outputs/<algo>/<dataset>/metrics.json`(含参数快照);对比表执行 `uv run python scripts/collect_results.py` 自动刷新到 `docs/benchmarks.md`,**禁止手改该文件**。
 
 ## 三、共享代码纪律(三次原则)
 

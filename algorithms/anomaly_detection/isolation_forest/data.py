@@ -1,22 +1,57 @@
-"""Synthetic univariate time series with injected point anomalies.
+"""Dataset loading.
 
-Self-contained (no external dataset) so the skeleton can be verified
-end-to-end; see data/README.md for how real datasets are registered.
+Default dataset `synthetic-point-anomaly` is generated in memory (no files
+needed). Real datasets follow the repo-wide standard format (see
+data/README.md): data/processed/<name>/{train.csv,test.csv,meta.json}.
 """
 
+import json
+from dataclasses import dataclass
+
 import numpy as np
+import pandas as pd
 from numpy.typing import NDArray
+from paths import PROCESSED_DATA_DIR
+
+SYNTHETIC_NAME = "synthetic-point-anomaly"
 
 
-def make_series(
-    n_samples: int, anomaly_ratio: float, seed: int
-) -> tuple[NDArray[np.floating], NDArray[np.int_]]:
-    """Trend + seasonality + noise, with random large spikes as anomalies.
+@dataclass(frozen=True)
+class Dataset:
+    """Univariate series split into train/test, with point-anomaly labels
+    (1 = anomaly) available for the test part only."""
 
-    Returns:
-        values: shape (n_samples,), the observed series.
-        labels: shape (n_samples,), 1 = anomaly, 0 = normal.
-    """
+    name: str
+    train: NDArray[np.floating]
+    test: NDArray[np.floating]
+    test_labels: NDArray[np.int_]
+
+
+def load_dataset(name: str, seed: int = 42) -> Dataset:
+    """Load a registered dataset by its name in data/README.md."""
+    if name == SYNTHETIC_NAME:
+        return _make_synthetic(seed)
+    ds_dir = PROCESSED_DATA_DIR / name
+    if not ds_dir.is_dir():
+        raise FileNotFoundError(
+            f"dataset '{name}' not found at {ds_dir}; register it in "
+            "data/README.md and run scripts/preprocess_<name>.py first"
+        )
+    meta = json.loads((ds_dir / "meta.json").read_text(encoding="utf-8"))
+    train = pd.read_csv(ds_dir / "train.csv")[meta["value_column"]].to_numpy()
+    test_df = pd.read_csv(ds_dir / "test.csv")
+    return Dataset(
+        name=name,
+        train=train,
+        test=test_df[meta["value_column"]].to_numpy(),
+        test_labels=test_df[meta["label_column"]].to_numpy(),
+    )
+
+
+def _make_synthetic(
+    seed: int, n_samples: int = 4096, anomaly_ratio: float = 0.03
+) -> Dataset:
+    """Trend + seasonality + noise with random spikes; last 30% is test."""
     rng = np.random.default_rng(seed)
     t = np.arange(n_samples)
     values = (
@@ -30,7 +65,13 @@ def make_series(
     spike = rng.choice([-1.0, 1.0], size=n_anomalies)
     values[idx] += spike * rng.uniform(5.0, 10.0, n_anomalies)
     labels[idx] = 1
-    return values, labels
+    split = int(n_samples * 0.7)
+    return Dataset(
+        name=SYNTHETIC_NAME,
+        train=values[:split],
+        test=values[split:],
+        test_labels=labels[split:],
+    )
 
 
 def make_features(values: NDArray[np.floating], window: int) -> NDArray[np.floating]:

@@ -1,17 +1,42 @@
-"""Dataset loading.
+"""Dataset loading via the repo-wide standard format.
 
-Datasets live in the repo-level data/ directory and must be registered in
-data/README.md. Each algorithm writes its own loader — usually under 20
-lines; extract shared code only after the same logic has been copied 3+
-times (the "rule of three").
+Standard layout for every registered dataset (see data/README.md):
+    data/processed/<name>/train.csv
+    data/processed/<name>/test.csv
+    data/processed/<name>/meta.json   # task, value_column, label_column, ...
+
+Swapping datasets must never require code changes here — only a different
+`--dataset` name. Keep this loader self-contained; extract shared code only
+after the same logic has been copied 3+ times (the "rule of three").
 """
 
-from paths import RAW_DATA_DIR
+import json
+from dataclasses import dataclass
+
+import pandas as pd
+from paths import PROCESSED_DATA_DIR
 
 
-def load_data():
-    """Load the dataset used by this algorithm.
+@dataclass(frozen=True)
+class Dataset:
+    name: str
+    train: pd.DataFrame
+    test: pd.DataFrame
+    meta: dict
 
-    TODO: read from RAW_DATA_DIR / "<dataset>" (see data/README.md).
-    """
-    raise NotImplementedError(f"register and load data under {RAW_DATA_DIR}")
+
+def load_dataset(name: str) -> Dataset:
+    """Load a registered dataset by its name in data/README.md."""
+    ds_dir = PROCESSED_DATA_DIR / name
+    if not ds_dir.is_dir():
+        raise FileNotFoundError(
+            f"dataset '{name}' not found at {ds_dir}; register it in "
+            "data/README.md and run scripts/preprocess_<name>.py first"
+        )
+    meta = json.loads((ds_dir / "meta.json").read_text(encoding="utf-8"))
+    return Dataset(
+        name=name,
+        train=pd.read_csv(ds_dir / "train.csv"),
+        test=pd.read_csv(ds_dir / "test.csv"),
+        meta=meta,
+    )
