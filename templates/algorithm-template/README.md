@@ -27,7 +27,12 @@ uv run python train.py --dataset <数据集登记名> --seed 0   # 改参数复�
 
 ## 结果
 
-每次运行写入 `outputs/{{ALGO_NAME}}/<dataset>/metrics.json`;运行 `uv run python scripts/collect_results.py` 后对比表自动刷新到 `docs/benchmarks.md`。
+每次运行写入 `outputs/{{ALGO_NAME}}/<dataset>/`:
+
+- `metrics.json` — 指标与参数快照(`scripts/collect_results.py` 据此刷新 `docs/benchmarks.md`)
+- `history.csv` + `curves.png` — 迭代式算法:每轮损失/指标及其曲线
+- 非迭代算法:至少一张结果可视化图(如 `scores.png`)
+- `checkpoint.pt` — 模型权重(可选,不入 Git)
 
 ## 参考文献
 

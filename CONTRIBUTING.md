@@ -33,7 +33,7 @@ uv run scripts/new_algorithm.py <category> <algo_name>
 - 预处理产物必须遵循**标准格式**(`train.csv` / `test.csv` / `meta.json`,字段见 `data/README.md`);预处理脚本放 `scripts/preprocess_<dataset>.py`,一个数据集一个脚本。
 - 每个数据集必须在 `data/README.md` 登记:来源、许可、格式字段、预处理与划分方式——这是多算法结果可比的前提。
 - 算法经 `load_dataset(name)` 加载数据,`train.py` 必须支持 `--dataset`/`--seed` 等 CLI 参数;**换数据集只改参数,不改代码**。
-- 每次运行写 `outputs/<algo>/<dataset>/metrics.json`(含参数快照);对比表执行 `uv run python scripts/collect_results.py` 自动刷新到 `docs/benchmarks.md`,**禁止手改该文件**。
+- 每次运行写 `outputs/<algo>/<dataset>/`:`metrics.json`(含参数快照)为机器可读层,`scripts/collect_results.py` 据此自动刷新 `docs/benchmarks.md`(**禁止手改**);迭代式算法还须写 `history.csv` 并渲染 `curves.png`,非迭代算法须输出至少一张结果可视化图——保证人看输出时能理解训练/结果过程,不只是一堆数字。
 
 ## 三、共享代码纪律(三次原则)
 

@@ -9,7 +9,7 @@
 1. **单一环境,目录级解耦**:全仓库共用一个 uv 环境(根目录 `.venv`),所有依赖集中在根 `pyproject.toml`;每个算法是一个自包含源码目录,不打包、不互相 import,删除任一算法目录不影响其他。
 2. **三次原则**:同一段逻辑重复出现 3 次之前不抽共享代码,宁可少量复制,保持算法间零耦合。
 3. **论文 ↔ 算法 ↔ 代码三段映射**:每篇论文有精读笔记(`docs/papers/`),每个算法 README 回链论文笔记,代码 docstring 标注论文章节/公式编号,总表见 `docs/README.md`。
-4. **数据与代码分离,格式标准化**:数据集统一放 `data/` 并登记(`data/README.md`),数据文件不入 Git;预处理产物遵循统一格式(`train.csv`/`test.csv`/`meta.json`),算法经 `load_dataset(name)` 加载,**换数据集只改参数不改代码**;结果按 `outputs/<algo>/<dataset>/` 存放,`scripts/collect_results.py` 自动汇总算法×数据集对比表到 `docs/benchmarks.md`。
+4. **数据与代码分离,格式标准化**:数据集统一放 `data/` 并登记(`data/README.md`),数据文件不入 Git;预处理产物遵循统一格式(`train.csv`/`test.csv`/`meta.json`),算法经 `load_dataset(name)` 加载,**换数据集只改参数不改代码**;结果按 `outputs/<algo>/<dataset>/` 存放,除 `metrics.json`(含参数快照)外,迭代式算法必须产出 `history.csv`+`curves.png`,非迭代算法必须产出至少一张结果可视化图——数字之外对人直观;`scripts/collect_results.py` 自动汇总算法×数据集对比表到 `docs/benchmarks.md`。
 
 ## 目录结构
 

@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 from config import Config
 from model import build_model
 from paths import OUTPUT_DIR
+from plot import plot_scores
 from sklearn.metrics import average_precision_score, roc_auc_score
 
 from data import load_dataset, make_features
@@ -63,6 +64,9 @@ def main() -> None:
     }
     out_dir = OUTPUT_DIR / dataset.name
     out_dir.mkdir(parents=True, exist_ok=True)
+    plot_scores(
+        dataset.test, test_labels, scores, config.window, out_dir / "scores.png"
+    )
     out_file = out_dir / "metrics.json"
     out_file.write_text(
         json.dumps(record, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"

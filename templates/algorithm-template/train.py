@@ -34,6 +34,9 @@ def main() -> None:
     print(f"running with seed={config.seed}")
     dataset = load_dataset(args.dataset)
     # TODO: fit on dataset.train, evaluate on dataset.test
+    # Iterative training: also record per-epoch history.csv into out_dir and
+    # render curves.png via plot_history (see plot.py); non-iterative
+    # algorithms must plot their result instead (e.g. scores.png).
     metrics: dict[str, float] = {}
     record = {
         "dataset": dataset.name,

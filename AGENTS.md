@@ -12,7 +12,7 @@
 2. **目录级解耦**:每个算法是 `algorithms/<类别>/<算法名>/` 下的自包含纯源码目录(无 `__init__.py`、不打包、不发布)。算法之间**禁止互相 import**;小量工具代码宁可复制。
 3. **三次原则**:同一段逻辑重复满 3 次才允许抽共享代码;抽取前先在 `docs/` 记录三处调用点。
 4. **数据标准化,换数据不改码**:数据只放 `data/`(不入 Git);预处理产物统一为 `data/processed/<name>/{train.csv,test.csv,meta.json}`(字段规范见 `data/README.md`);算法经 `load_dataset(name)` 加载,**靠 `--dataset` 参数切换数据集**,不得为换数据改代码。
-5. **运行可复现、结果可对比**:算法入口必须支持 `--dataset`/`--seed` 等 CLI 参数;每次运行写 `outputs/<algo>/<dataset>/metrics.json`(含参数快照);对比表由 `scripts/collect_results.py` 自动生成,**`docs/benchmarks.md` 禁止手改**。
+5. **运行可复现、结果可对比、过程可直观**:算法入口必须支持 `--dataset`/`--seed` 等 CLI 参数;每次运行写 `outputs/<algo>/<dataset>/`,内容分两层——**机器可读**:`metrics.json`(含参数快照,对比表由 `scripts/collect_results.py` 自动生成,`docs/benchmarks.md` 禁止手改);**人类直观**:迭代式算法必须写 `history.csv` 并渲染 `curves.png`(模板 `plot.py` 示范),非迭代算法必须输出至少一张结果可视化图(如 `scores.png`);模型权重存 `checkpoint.pt`(不入 Git)。
 6. **三段映射同步**:论文笔记(`docs/papers/`)↔ 算法 README 元信息 ↔ 代码 docstring 公式标注,三者必须一致;新增算法必须在 `docs/README.md` 总表登记。
 
 ## 3. 目录地图
@@ -72,7 +72,7 @@ uv run ruff check .                                 # 检查;加 --fix 自动修
 ## 8. 交付前验收清单
 
 - [ ] `uv sync` 成功
-- [ ] 新增/修改的算法 `train.py --dataset <名>` 实跑成功,记录写入 `outputs/<algo>/<dataset>/`
+- [ ] 新增/修改的算法 `train.py --dataset <名>` 实跑成功,`outputs/<algo>/<dataset>/` 下生成 `metrics.json` + 至少一张可视化图(迭代算法另有 `history.csv`+`curves.png`)
 - [ ] `uv run python scripts/test_all.py` 全绿
 - [ ] `uv run python scripts/collect_results.py` 已运行,`docs/benchmarks.md` 已刷新
 - [ ] `uv run ruff check .` 零告警

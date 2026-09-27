@@ -27,7 +27,7 @@ uv run python train.py --dataset <登记名> --seed 0       # 换数据集/种�
 
 ## 结果
 
-每次运行写入 `outputs/isolation_forest/<dataset>/metrics.json`;`uv run python scripts/collect_results.py` 将对比表自动刷新到 `docs/benchmarks.md`。
+每次运行写入 `outputs/isolation_forest/<dataset>/`:`metrics.json`(指标与参数快照)+ `scores.png`(测试段序列/真实异常标注/异常分数双联图)。`uv run python scripts/collect_results.py` 将对比表自动刷新到 `docs/benchmarks.md`。
 
 ## 参考文献
 
