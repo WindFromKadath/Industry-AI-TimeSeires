@@ -1,5 +1,7 @@
 # Industry-LLM-Timeseires
 
+中文 | [English](README.en.md)
+
 工业时序 AI 学习仓库:以经典论文复现为主线,覆盖异常检测、预测、分类与时序表征(含 LLM 方向)等任务。
 
 > AI Agent / 维护者入口:[AGENTS.md](AGENTS.md)(架构铁律、操作流程、验收清单)。
