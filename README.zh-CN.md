@@ -58,7 +58,7 @@ uv run scripts/new_algorithm.py <类别> <算法名>
 # 例:uv run scripts/new_algorithm.py forecasting dlinear
 ```
 
-然后(详见 [CONTRIBUTING.md](CONTRIBUTING.md)):
+然后(详见 [CONTRIBUTING.md](CONTRIBUTING.zh-CN.md)):
 
 1. 填写新目录下 `README.md` 元信息(论文笔记链接、数据集、状态)
 2. 在 `docs/papers/` 建论文笔记,并在 `docs/README.md` 总表登记一行
@@ -72,7 +72,7 @@ uv run scripts/new_algorithm.py <类别> <算法名>
 - 数据:先入 `data/raw/` 并在 `data/README.md` 登记,预处理脚本放 `scripts/preprocess_<dataset>.py`
 - 结果:运行后执行 `uv run python scripts/collect_results.py` 刷新对比表(勿手改 `docs/benchmarks.md`)
 - 依赖:只准 `uv add`(禁止 `uv pip install`,会被 `uv sync` 清除);CUDA 版 PyTorch 已固定在 `pyproject.toml`
-- 推送 GitHub 前:过一遍 [CONTRIBUTING.md](CONTRIBUTING.md) 的隐私检查清单
+- 推送 GitHub 前:过一遍 [CONTRIBUTING.md](CONTRIBUTING.zh-CN.md) 的隐私检查清单
 
 ## License
 
